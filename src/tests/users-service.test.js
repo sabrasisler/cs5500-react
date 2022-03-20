@@ -1,3 +1,7 @@
+/**
+* @jest-environment node
+*/
+
 import {
   createUser,
   deleteUsersByUsername, findAllUsers,
@@ -10,6 +14,7 @@ describe('createUser', () => {
     username: 'ellenripley',
     password: 'lv426',
     email: 'ellenripley@aliens.com'
+
   };
 
   // setup test before running test
@@ -151,4 +156,4 @@ describe('findAllUsers',  () => {
       expect(user.email).toEqual(`${username}@stooges.com`);
     });
   });
-});
+ });
