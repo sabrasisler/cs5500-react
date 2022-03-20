@@ -3,7 +3,7 @@
 */
 
 import { createTuit, deleteTuit, findTuitById } from "../services/tuits-service";
-import { createUser } from "../services/users-service";
+import { createUser, deleteUsersByUsername } from "../services/users-service";
 
 describe('can create tuit with REST API', () => {
   //create sample user to post tuit
@@ -14,23 +14,26 @@ describe('can create tuit with REST API', () => {
   };
 
   const bobTuit = { tuit: "hello my name is Bob." };
+  var tid;
 
-  // // setup test before running test
-  // beforeAll(() => {
-  //   // remove any/all users to make sure we create it in the test
-  //   return deleteUsersByUsername(ripley.username);
-  // })
+  // setup test before running test
+  beforeAll(() => {
+    // remove any/all users to make sure tuit won't exist because user who posted it won't exist
+    return deleteUsersByUsername(bobUser.username);
+  })
 
-  // afterAll(() => {
-  //   // remove any data we created
-  //   return deleteUserById(bobUser.username);
-  // })
+  afterAll(() => {
+    // remove any data we created
+    deleteUsersByUsername(bobUser.username);
+      return deleteTuit(tid);
+    
+  })
 
   test('can insert new tuits with REST API', async () => {
 
-
     const newUser = await createUser(bobUser);
     const newTuit = await createTuit(newUser._id, bobTuit);
+    tid = newUser._id;
 
     // verify inserted tuit's properties match parameter tuit
     expect(newTuit.tuit).toEqual(bobTuit.tuit);
@@ -47,6 +50,7 @@ describe('can delete tuit wtih REST API', () => {
   };
 
   const tuit2 = { tuit: "user 2's tuit" };
+  var tid;
 
   // // setup the tests before verification
   // beforeAll(() => {
@@ -55,11 +59,10 @@ describe('can delete tuit wtih REST API', () => {
   // });
 
 
-  // // clean up after test runs
-  // afterAll(() => {
-  //   // remove any data we created
-  //   return deleteUsersByUsername(sowell.username);
-  // })
+  // clean up after test runs
+  afterAll(() => {
+    return deleteUsersByUsername(user2);
+  })
 
   test('can delete tuit from REST API by id', async () => {
 
@@ -70,6 +73,7 @@ describe('can delete tuit wtih REST API', () => {
 
     // verify we deleted at least one user by their username
     expect(status.deletedCount).toBeGreaterThanOrEqual(1);
+
   });
 });
 
@@ -79,6 +83,7 @@ describe('can retrieve a tuit by their primary key with REST API', () => {
     password: 'password1',
     email: 'test@gmail.com'
   };
+  var tid;
 
   const testTuit = { tuit: "Test get tuit by primary key" };
 
@@ -87,11 +92,10 @@ describe('can retrieve a tuit by their primary key with REST API', () => {
   //     // delete a tuit
   // });
 
-  // // clean up after ourselves
-  // afterAll(() => {
-  //   // remove any data we inserted
-  //   return deleteTuit()
-  // });
+  afterAll(() => {
+    // remove any data we inserted
+    return deleteTuit(tid)
+  });
 
   test('can retrieve tuit from REST API by primary key', async () => {
 
@@ -115,42 +119,42 @@ describe('can retrieve a tuit by their primary key with REST API', () => {
   });
 });
 
-describe('can retrieve all tuits with REST API', () => {
-  const kevinUser = {
-    username: 'kevin123',
-    password: 'password',
-    email: 'kevin@gmail.com'
-  };
+// describe('can retrieve all tuits with REST API', () => {
+//   const kevinUser = {
+//     username: 'kevin123',
+//     password: 'password',
+//     email: 'kevin@gmail.com'
+//   };
 
-  // sample tuits to insert and then retrieve
-  const tuitStrings = [
-    "tuit 1", "tuit 2", "tuit 3"
-  ];
+//   // sample tuits to insert and then retrieve
+//   const tuitStrings = [
+//     "tuit 1", "tuit 2", "tuit 3"
+//   ];
 
-  test('can retrieve all users from REST API', async () => {
+//   test('can retrieve all users from REST API', async () => {
 
-    const user = await createUser(kevinUser);
+//     const user = await createUser(kevinUser);
 
-    tuitStrings.map(tuitString =>
-      createTuit(user._id, { tuit: tuitString })
-    )
-    tids = newTuits.map(response => response.then(res => { res._id }))
+//     tuitStrings.map(tuitString =>
+//       createTuit(user._id, { tuit: tuitString })
+//     )
+//     tids = newTuits.map(response => response.then(res => { res._id }))
 
-    // retrieve all the tuits
-    const tuits = await findAllTuits();
+//     // retrieve all the tuits
+//     const tuits = await findAllTuits();
 
-    // // there should be a minimum number of users
-    // expect(tuits.length).toBeGreaterThanOrEqual(tuitStrings.length);
+//     // // there should be a minimum number of users
+//     // expect(tuits.length).toBeGreaterThanOrEqual(tuitStrings.length);
 
-    // // let's check each tuit we inserted
-    // const tuitsWeInserted = tuits.filter(
-    //   tuit => tuitString.indexOf(tuit.tuit) >= 0);
+//     // // let's check each tuit we inserted
+//     // const tuitsWeInserted = tuits.filter(
+//     //   tuit => tuitString.indexOf(tuit.tuit) >= 0);
 
-    // // compare the actual users in database with the ones we sent
-    // tuitsWeInserted.forEach(tuit => {
-    //   const tuitString = tuitStrings.find(username => username === user.username);
-    //   expect(tuit.tuit).toEqual(tuitString);
-    //   //expect(tuit.postedBy).toEqual(`${username}123`);
-    // });
-  });
-});
+//     // // compare the actual users in database with the ones we sent
+//     // tuitsWeInserted.forEach(tuit => {
+//     //   const tuitString = tuitStrings.find(username => username === user.username);
+//     //   expect(tuit.tuit).toEqual(tuitString);
+//     //   //expect(tuit.postedBy).toEqual(`${username}123`);
+//     // });
+//   });
+// });
