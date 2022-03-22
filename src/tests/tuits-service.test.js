@@ -80,7 +80,7 @@ describe('can retrieve a tuit by their primary key with REST API', () => {
 
   // setup before running test
   beforeAll(() => {
-      return deleteUsersByUsername(testUser.username);
+    return deleteUsersByUsername(testUser.username);
   });
 
   afterAll(() => {
@@ -108,53 +108,51 @@ describe('can retrieve a tuit by their primary key with REST API', () => {
   });
 });
 
-// describe('can retrieve all tuits with REST API', () => {
+describe('can retrieve all tuits with REST API', () => {
 
-//   const user = {
-//     username: 'user',
-//     password: 'userpassword',
-//     email: 'user@gmail.com'
-//   };
+  const user = {
+    username: 'user',
+    password: 'userpassword',
+    email: 'user@gmail.com'
+  };
+  const tuitStrings = ["tuit 1", "tuit 2", "tuit 3"];
+  var tids;
 
-//   // setup before running test
-//   beforeAll(() => {
-//     const tuitStrings = ["tuit 1", "tuit 2", "tuit 3"];
-//     const createdUser = createUser(user);
-//     const newTuits = Promise.all(
-//       tuitStrings.map(
-//           sample_tuit =>
-//               createTuit(createdUser._id, {tuit: sample_tuit})
-//       ));
-//       console.log(newTuits);
-//       return newTuits;
-//   });
+  afterAll(() => {
+    // remove any data we inserted
+    deleteUsersByUsername(user.username);
+    deleteTuit(tids[0]);
+    deleteTuit(tids[1]);
+    return deleteTuit(tids[2])
+  });
+
+  // sample tuits to insert and then retrieve
+  test('can retrieve all tuits from REST API', async () => {
+
+    const createdUser = await createUser(user);
+
+    const newTuit1 = await createTuit(createdUser._id, { tuit: tuitStrings[0] });
+    const newTuit2 = await createTuit(createdUser._id, { tuit: tuitStrings[1] });
+    const newTuit3 = await createTuit(createdUser._id, { tuit: tuitStrings[2] });
+    
+    const newTuits = [newTuit1, newTuit2, newTuit3];
+    tids = [newTuit1._id, newTuit2._id, newTuit3._id];
+
+    const tuits = await findAllTuits();
+
+    expect(tuits.length).toBeGreaterThanOrEqual(newTuits.length);
+
+    //Look for users we made tuit with
+    const tuitsWeInserted = tuits.filter(
+      tuit => (tuitStrings.indexOf(tuit.tuit) >= 0) && (tuit.postedBy == createdUser._id));
+
+    //Verify properties
+    tuitsWeInserted.forEach(retrievedTuit => {
+      const insertedTuit = newTuits.find(tuit => retrievedTuit.tuit == tuit.tuit);
+      expect(retrievedTuit.tuit).toEqual(insertedTuit.tuit);
+      expect(retrievedTuit.postedBy).toEqual(insertedTuit.postedBy);
+    });
+  });
+});
 
 
-//   // sample tuits to insert and then retrieve
-//   test('can retrieve all tuits from REST API', async () => {
-
-
-//     // const newTuits = tuitStrings.map(tuitString =>
-//     //   createTuit(createdUser._id, { tuit: tuitString })
-//     // );
-
-
-//     const tuits = await findAllTuits();
-
-//     expect(tuits.length).toBeGreaterThanOrEqual(newTuits.length);
-
-//     //Look for users we made tuit with
-//     const tuitsWeInserted = tuits.filter(
-//         tuit => newTuits.indexOf(tuit) >= 0 );
-
-
-//     //Verify properties
-//     tuitsWeInserted.forEach(tuit1 => {
-//         const singleTuit = newTuits.find(tuit => tuit === tuit1.tuit);
-//         expect(singleTuit.tuit).toEqual(tuit1);
-//         console.log("single tuit");
-//         //expect(tuitExample.postedBy).toEqual(newUser);
-//     });
-
-//   });
-// });
