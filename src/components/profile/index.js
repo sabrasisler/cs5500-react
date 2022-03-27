@@ -5,6 +5,8 @@ import * as service from "../../services/security-service"
 import TuitsAndReplies from "./tuits-and-replies";
 import Media from "./media";
 import MyLikes from "./my-likes";
+import MyDislikes from "./my-dislikes";
+
 const Profile = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -65,8 +67,8 @@ const Profile = () => {
             Joined December 2007
           </p>
           <b>178</b> Following
-          <b className="ms-4">51.1M</b> Followers
-          <ul className="mt-4 nav nav-pills nav-fill">
+          <b className="ms-5">51.1M</b> Followers
+          <ul className="mt-5 nav nav-pills nav-fill">
             <li className="nav-item">
               <Link to="/profile/mytuits"
                     className={`nav-link ${location.pathname.indexOf('mytuits') >= 0 ? 'active':''}`}>
@@ -87,6 +89,11 @@ const Profile = () => {
                     className={`nav-link ${location.pathname.indexOf('likes') >= 0 ? 'active':''}`}>
                 Likes</Link>
             </li>
+            <li className="nav-item">
+              <Link to="/profile/dislikes"
+                    className={`nav-link ${location.pathname.indexOf('dislikes') >= 0 ? 'active':''}`}>
+                Dislikes</Link>
+            </li>
           </ul>
         </div>
       </div>
@@ -95,6 +102,7 @@ const Profile = () => {
           <Route path="/tuits-and-replies" element={<TuitsAndReplies/>}/>
           <Route path="/media" element={<Media/>}/>
           <Route path="/likes" element={<MyLikes/>}/>
+          <Route path="/dislikes" element={<MyDislikes/>}/>
         </Routes>
     </div>
   );
