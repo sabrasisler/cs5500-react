@@ -3,12 +3,11 @@
 */
 
 import {
-    createUser,
-    deleteUsersByUsername, findAllUsers,
-    findUserById
-  } from "../services/users-service";
+    findAllTuitsDislikedByUser,
+    findAllUsersThatDislikedTuit, userDislikesTuit
+  } from "../services/dislikes-service";
   
-  describe('createUser', () => {
+  describe('dislikeTuit', () => {
     // sample user to insert
     const ripley = {
       username: 'ellenripley',
