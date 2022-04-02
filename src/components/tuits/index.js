@@ -1,3 +1,7 @@
+/**
+ * @file Renders all of the Tuit components
+ */
+
 import React from "react";
 import './tuits.css';
 import Tuit from "./tuit";
