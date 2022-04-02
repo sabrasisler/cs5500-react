@@ -20,7 +20,8 @@ test('stats render correctly', () => {
             tuitStats.update(
                 <TuitStats
                     tuit={{ stats: stats }}
-                    likeTuit={() => { }}
+                    likeTuit = {() => { }}
+                    dislikeTuit={dislikeTuit}
                 />)
         })
     }

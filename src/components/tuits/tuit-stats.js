@@ -1,5 +1,13 @@
-import React from "react";
+/**
+ * @file Render the tuit stats component of a Tuit. It displays icons and counts for retuits,
+ * replies, likes, and dislikes.
+ */
 
+import React from "react";
+/**
+ * Renders tuits stats component of a Tuit
+ * @returns displays tuit stats
+ */
 const TuitStats = ({tuit, likeTuit = () => {}, dislikeTuit = () => {}}) => {
     return (
       <div className="row mt-2">
